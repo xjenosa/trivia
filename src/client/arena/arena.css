@@ -1,0 +1,83 @@
+/* The 3D board (/host): backdrop, scrim, then the transparent three.js canvas.
+   The chrome is in projector.css. BRAND.md, Backgrounds, explains the backdrop. */
+
+.arena3d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Kawarp's canvas: a small buffer stretched to an oversized square, so it can
+   turn slowly without showing its corners (the stage's diagonal is 1.15 times
+   its width). */
+.backdrop {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 0;
+  display: block;
+  width: 116cqw;
+  height: 116cqw;
+  translate: -50% -50%;
+  opacity: 0.5;
+  animation: turn 90s linear infinite;
+}
+
+@keyframes turn {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Darkens the backdrop behind the question card and the dock, the way the TV app
+   fades artwork behind titles. It sits under the board, so the board is never dimmed. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--scrim-top) 0%, var(--clear) 34%, var(--clear) 62%, var(--scrim-bottom) 100%);
+}
+
+/* Like the setting that removes blurred backgrounds: solid black. */
+@media (prefers-contrast: more) {
+  .backdrop {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop {
+    animation: none;
+  }
+}
+
+.no-webgl {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.2cqw;
+  text-align: center;
+  font-size: 1.6cqw;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.no-webgl p {
+  margin: 0;
+}
+
+.no-webgl a {
+  border-radius: 99px;
+  padding: 0.7cqw 2cqw;
+  font-weight: 700;
+  text-decoration: none;
+  background: var(--color-live);
+  color: var(--color-ink);
+}

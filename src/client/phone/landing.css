@@ -1,0 +1,248 @@
+/* Landing (BRAND.md, Landing). Solid black like the phone pages, and no glass but
+   the play button that floats over the video under reduced motion.
+   Phone width is the base; the wide layout starts at 760px (Landing.tsx picks the
+   video size at the same breakpoint). DOM order is the wide layout's; the phone
+   moves the video above the actions with `order`. */
+
+.landing {
+  min-height: 100dvh;
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: calc(env(safe-area-inset-top, 0px) + 20px) 21px calc(env(safe-area-inset-bottom, 0px) + 24px);
+}
+
+/* Phone: title, line and video are one centered group in the height the
+   actions leave, the way a welcome screen is laid out. */
+.ld-head {
+  margin-top: auto;
+  padding-top: 12px;
+  text-align: center;
+}
+
+.ld-title {
+  margin: 0;
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.ld-line {
+  margin: 10px 0 0;
+  color: var(--color-muted);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.ld-video {
+  order: 1;
+  position: relative;
+  margin-bottom: auto;
+  padding: 28px 0;
+}
+
+.ld-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  /* The video's own background is black, so it has no card and no corners: the
+     projector and the phone in it float on the page. */
+  background: var(--color-bg);
+}
+
+.ld-over {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.ld-play {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  color: var(--color-text);
+  pointer-events: auto;
+}
+
+.ld-actions {
+  order: 2;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 12px;
+}
+
+/* One capsule: the room code and its Join button. */
+.ld-join {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 56px;
+  border-radius: 99px;
+  padding: 0 6px 0 24px;
+  background: var(--color-surface);
+  transition: box-shadow 0.2s var(--ease-out);
+}
+
+.ld-join:focus-within {
+  box-shadow: 0 0 0 2px var(--color-live);
+}
+
+.ld-join input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  outline: none;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  caret-color: var(--color-live);
+}
+
+.ld-join input::placeholder {
+  color: var(--color-muted);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 1;
+}
+
+/* The go button sits inside the field's trailing end, the way a sign-in field
+   or a message field holds its arrow. The glyph is the circle: mint once the code
+   is complete, quiet until then. */
+.ld-join button {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 44px;
+  background: var(--color-ink);
+  color: var(--color-live);
+  transition:
+    color 0.2s,
+    scale 0.2s var(--ease-out);
+}
+
+/* The glyph's circle is 46.6 of its 56 units: scaled so the circle fills the box. */
+.ld-join button .ico {
+  transform: scale(1.2);
+}
+
+.ld-join button:active,
+.ld-host:active {
+  scale: 0.97;
+}
+
+.ld-join button:disabled {
+  background: none;
+  color: var(--color-line);
+  cursor: default;
+}
+
+/* On a phone hosting is the second choice; on a laptop it is the first. */
+.ld-host {
+  display: grid;
+  place-items: center;
+  height: 56px;
+  border-radius: 99px;
+  padding: 0 28px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  background: var(--fill);
+  color: var(--color-text);
+  transition: scale 0.2s var(--ease-out);
+}
+
+@media (min-width: 760px) {
+  .landing {
+    align-items: center;
+    padding: 64px 32px 24px;
+  }
+
+  .ld-head {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .ld-title {
+    font-size: clamp(72px, 7vw, 104px);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .ld-line {
+    margin-top: 14px;
+    font-size: 24px;
+    letter-spacing: -0.015em;
+  }
+
+  .ld-actions {
+    order: 1;
+    flex-direction: row;
+    margin-top: 30px;
+  }
+
+  .ld-join,
+  .ld-host {
+    height: 52px;
+  }
+
+  .ld-join {
+    width: 220px;
+    padding-left: 22px;
+  }
+
+  .ld-join button {
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+  }
+
+  .ld-host {
+    background: var(--color-text);
+    color: var(--color-ink);
+  }
+
+  /* Sized so title, actions and video share one screen on a laptop. */
+  .ld-video {
+    order: 2;
+    margin-bottom: 0;
+    width: min(100%, 1040px, max(520px, (100dvh - 380px) * 16 / 9));
+    padding: 44px 0 0;
+  }
+
+  .ld-over {
+    inset: 44px 0 0;
+  }
+
+  .ld-play {
+    width: 84px;
+    height: 84px;
+    font-size: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ld-join,
+  .ld-join button,
+  .ld-host {
+    transition: none;
+  }
+}

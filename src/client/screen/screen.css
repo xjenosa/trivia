@@ -1,0 +1,187 @@
+/* The 2D board (/host/2d), seen straight down from above. Platforms and tokens are
+   solid; only the chrome in arena/projector.css is glass. Motion: hop, drop,
+   fall, respawn (BRAND.md). */
+
+.board2d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform-origin: 50% 56%;
+  transition: transform 0.7s var(--ease-out);
+}
+
+/* No room yet (or no host key): nothing to show. */
+.board2d[data-empty] {
+  opacity: 0;
+}
+
+/* The lobby panel takes the left and there is no question card, so the board
+   steps right and grows into the space. */
+.board2d[data-phase="lobby"] {
+  transform: translate(15.5cqw, -3.6cqw) scale(1.22);
+}
+
+/* A platform: a square squircle, like an app icon. */
+.plat {
+  position: absolute;
+  width: 11cqw;
+  height: 11cqw;
+  transition:
+    transform 0.7s var(--ease-out),
+    opacity 0.5s;
+}
+
+.plat svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0.5cqw 1cqw var(--shadow));
+}
+
+.plat .sheen-top {
+  stop-color: color-mix(in srgb, var(--p) 86%, var(--color-text));
+}
+
+.plat .sheen-base {
+  stop-color: var(--p);
+}
+
+/* A thin, steady ring in the live accent. No pulse, no second halo. */
+.answer-ring {
+  fill: none;
+  stroke: var(--color-live);
+  stroke-width: 0.3;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.plat.correct .answer-ring {
+  opacity: 1;
+}
+
+/* Drop: seen from above, a platform that gives way falls away from the viewer. */
+.plat.dropped {
+  transform: scale(0.2) rotate(var(--tilt));
+  opacity: 0;
+  transition:
+    transform 0.9s cubic-bezier(0.5, 0, 1, 0.5),
+    opacity 0.9s ease-in;
+}
+
+/* The bracket: the platform's mark, big and in the middle, the same as on the
+   matching phone box. It sits under the tokens, so it stays quiet. */
+.plat-mark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 5.2cqw;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  white-space: pre;
+  color: color-mix(in srgb, var(--color-ink) 26%, transparent);
+}
+
+.plat-label {
+  position: absolute;
+  top: 0.9cqw;
+  left: 0.9cqw;
+  right: 0.9cqw;
+  text-align: center;
+  font-size: 1.5cqw;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  text-wrap: balance;
+  color: var(--color-ink);
+}
+
+/* Longer answers (up to 18 characters) step down a size and may take two lines. */
+.plat-label[data-long] {
+  font-size: 1.22cqw;
+}
+
+.dock2d {
+  position: absolute;
+  overflow: visible;
+  fill: var(--color-line);
+}
+
+/* A token standee: hearts, the token, the name. */
+.tok {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.2cqw;
+  width: 3.6cqw;
+  transform: translate(var(--x), var(--y)) translate(-50%, -50%) scale(var(--s));
+  /* Hop: a springy move between spots. */
+  transition:
+    transform 0.55s var(--ease-spring),
+    opacity 0.4s;
+  /* Respawn: a pop-in. It must not fill forwards, or it would pin opacity and
+     cancel the fall. */
+  animation: pop-in 0.45s var(--ease-spring) backwards;
+}
+
+.tok .hearts {
+  gap: 0.12cqw;
+  font-size: 0.95cqw;
+}
+
+/* Matte, no ring: a soft shadow under the token separates it from a platform of
+   its own color. */
+.tok .ava {
+  width: 3.2cqw;
+  font-size: 1.45cqw;
+  box-shadow: 0 0.3cqw 0.8cqw var(--shadow);
+  transition: opacity 0.4s;
+}
+
+.tok-name {
+  max-width: 4.3cqw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 99px;
+  padding: 0.12cqw 0.6cqw;
+  font-size: 0.85cqw;
+  font-weight: 600;
+  line-height: 1.3;
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+}
+
+/* Out of lives: the token fades in its own color (graphite is a player color). */
+.tok.ghost .ava {
+  opacity: 0.3;
+}
+
+/* Fall: away from the viewer with a spin, along with its platform. */
+.tok.falling {
+  transform: translate(var(--x), var(--y)) translate(-50%, -50%) scale(calc(var(--s) * 0.15)) rotate(120deg);
+  opacity: 0;
+  transition:
+    transform 0.9s cubic-bezier(0.5, 0, 1, 0.5),
+    opacity 0.9s ease-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board2d,
+  .plat,
+  .plat.dropped,
+  .tok,
+  .tok.falling,
+  .answer-ring {
+    transition: none;
+  }
+
+  .tok {
+    animation: none;
+  }
+}

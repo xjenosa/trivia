@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "trivia",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  // Pages are static assets; anything that matches no asset reaches the Worker.
+  "assets": { "binding": "ASSETS", "html_handling": "auto-trailing-slash" },
+  "durable_objects": {
+    "bindings": [{ "name": "ROOMS", "class_name": "Room" }]
+  },
+  // SQLite-backed: the only Durable Object storage on the free plan.
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }]
+}

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.wrangler/
+.env*
+QUEUE.md
+worker-configuration.d.ts
+test-results/
+playwright-report/
+screenshots/

@@ -1,0 +1,261 @@
+/* Brand tokens and the shared look. BRAND.md explains each choice.
+   RULE: literal colors live in this file only. Every other stylesheet and every
+   canvas (through brand.ts) reads these variables. */
+
+@import "tailwindcss";
+@import "@fontsource-variable/inter/opsz.css";
+
+@theme static {
+  --font-sans: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Only the brand palette exists: Tailwind's own colors are switched off. */
+  --color-*: initial;
+  --color-bg: #000000;
+  --color-surface: #1c1c1e;
+  --color-surface2: #2c2c2e;
+  --color-line: #3a3a3c;
+  --color-text: #ffffff;
+  --color-muted: #98989f;
+  --color-live: #63e6e2;
+  --color-stakes: #ff375f;
+  --color-right: #30d158;
+  --color-wrong: #ff453a;
+  /* Text on any colored fill. */
+  --color-ink: #000000;
+
+  /* Platforms and phone zones, in bracket order: ( ) [ ] { } < > */
+  --color-platform-0: #0a84ff;
+  --color-platform-1: #bf5af2;
+  --color-platform-2: #ff9f0a;
+  --color-platform-3: #30d158;
+
+  /* Player colors: the Mac accent colors, in System Settings order. */
+  --color-avatar-0: #1d97ff;
+  --color-avatar-1: #cc76cf;
+  --color-avatar-2: #ff72c2;
+  --color-avatar-3: #ff453a;
+  --color-avatar-4: #ff932c;
+  --color-avatar-5: #ffdc18;
+  --color-avatar-6: #72ca57;
+  --color-avatar-7: #989898;
+
+  /* shadcn names, so registry components resolve to the same palette. */
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Grouped cells (phones). */
+  --separator: rgba(84, 84, 88, 0.6);
+  --fill: rgba(118, 118, 128, 0.24);
+
+  /* Glass (projector chrome). */
+  --glass: rgba(36, 36, 40, 0.44);
+  --glass-solid: rgba(44, 44, 46, 0.96);
+  --glass-line: rgba(255, 255, 255, 0.16);
+  --glass-hi: rgba(255, 255, 255, 0.26);
+
+  /* The glass card (ui/glass-card.tsx): a specular highlight, a sweep along the
+     top edge, a faint chromatic fringe where glass splits light, a shade toward
+     the bottom, and the polished edges of the pane. */
+  --glass-specular: radial-gradient(closest-side, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04) 48%, transparent 74%);
+  --glass-sweep: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.16) 55%, transparent);
+  --glass-fringe: linear-gradient(125deg, rgba(120, 220, 255, 0.3) 0%, transparent 36%, transparent 64%, rgba(255, 130, 200, 0.24) 100%);
+  --glass-shade: linear-gradient(to bottom, transparent 48%, rgba(0, 0, 0, 0.2) 100%);
+  --glass-body-edge: inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --glass-inner-ring: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.13), inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+  --glass-card-shadow: 0 26px 60px -26px rgba(0, 0, 0, 0.6), 0 10px 26px -18px rgba(0, 0, 0, 0.45);
+
+  /* Light and shade laid over tokens: sheens, tracks, shadows, scrims. */
+  --sheen: rgba(255, 255, 255, 0.45);
+  --sheen-soft: rgba(255, 255, 255, 0.18);
+  --raise: rgba(255, 255, 255, 0.1);
+  --raise-strong: rgba(255, 255, 255, 0.28);
+  --track: rgba(255, 255, 255, 0.16);
+  --shade: rgba(0, 0, 0, 0.16);
+  --shadow: rgba(0, 0, 0, 0.35);
+  --shadow-deep: rgba(0, 0, 0, 0.55);
+  --scrim-top: rgba(0, 0, 0, 0.6);
+  --scrim-bottom: rgba(0, 0, 0, 0.65);
+  --clear: rgba(0, 0, 0, 0);
+
+  /* Studio light for the 3D arena: a warm key, a cool rim, a soft sky fill. */
+  --light-key: #fff2e0;
+  --light-rim: #5e8cff;
+  --light-sky: #bfd4ff;
+  --light-ground: #1a1024;
+
+  /* Motion: iOS-like springs. No bounce beyond a pop-in. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.3, 0.5, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-size: 17px;
+  line-height: 1.47;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+#root {
+  height: 100%;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-live);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Glass: only for controls and chrome floating over content. Plain frost is the
+   baseline everywhere (Safari and Firefox cannot refract), and it turns solid
+   when the system asks for less transparency. */
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid var(--glass-line);
+  box-shadow:
+    inset 0 1px 0 var(--glass-hi),
+    0 10px 30px var(--shadow);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: var(--glass-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Framework7 glyphs, filled, one weight. */
+.ico {
+  display: block;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+/* A player token, like a contact's monogram bubble: the player's color, matte,
+   with their initial. No gloss, no shading, never a ring. Where a token sits on a
+   platform or a zone of its own color, the page adds a soft shadow under it. */
+.ava {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  /* White, as Contacts draws a monogram, on every color. */
+  color: var(--color-text);
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c) 86%, var(--color-text)), var(--c));
+}
+
+/* No name yet: the silhouette fills the bubble and its shoulders meet the edge.
+   White, like the initial it stands in for. */
+.ava-person {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.hearts {
+  display: flex;
+  color: var(--color-stakes);
+}
+
+.hearts .lost {
+  opacity: 0.25;
+}
+
+/* Countdown: the ring and its number share one grid cell, so the number is
+   dead center at any size. */
+.timer {
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.timer > * {
+  grid-area: 1 / 1;
+}
+
+.timer svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer circle {
+  fill: none;
+  stroke-width: 4.5;
+}
+
+.timer .ring-track {
+  stroke: var(--track);
+}
+
+.timer .ring-fill {
+  stroke: var(--color-live);
+  stroke-linecap: round;
+  stroke-dasharray: 125.66;
+  transition: stroke-dashoffset 0.12s linear;
+}
+
+.timer.paused .ring-fill {
+  stroke: var(--color-muted);
+}
+
+.ring-num {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timer .ring-fill {
+    transition: none;
+  }
+}
